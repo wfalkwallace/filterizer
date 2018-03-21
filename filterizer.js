@@ -2,12 +2,14 @@ const xmlHeader = (name, email, updated) => `<?xml version="1.0" encoding="utf-8
 const xmlFooter = "</feed>";
 const getEntryXml = filterContent => `<entry><category term="filter"></category><title>Mail Filter</title><content></content>${filterContent}</entry>`;
 
+// TODO: add shouldTrash, forwardTo, hasAttachment, shouldStar
 const getLabelXml = label => '<apps:property name="label" value="${label}"></apps:property>';
 const getNeverSpamXml = _ => '<apps:property name="shouldNeverSpam" value="true"></apps:property>';
 const getMarkReadXml = _ => '<apps:property name="shouldMarkAsRead" value="true"></apps:property>';
 const getShouldArchiveXml = _ => '<apps:property name="shouldArchive" value="true"></apps:property>';
 const getArchiveIndirectXml = me => `<apps:property name="doesNotHaveTheWord" value="${me}"></apps:property>`;
 const getHasXml = value => `<apps:property name="hasTheWord" value="${value}"></apps:property>`;
+
 
 const getHasPart = hasValue => {
   if (typeof hasValue === 'string') {
