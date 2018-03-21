@@ -1,7 +1,3 @@
-const date = "2018-03-20T03:00:22Z";
-const name = "William Falk-Wallace";
-const email = "wfalkwallace@gmail.com";
-
 const xmlHeader = (name, email, updated) => `
 <?xml version='1.0' encoding='utf-8' ?>
 <feed xmlns:apps='http://schemas.google.com/apps/2006' xmlns='http://www.w3.org/2005/Atom'>
@@ -28,7 +24,7 @@ const getLabelXml = label => "<apps:property name='label' value='${label}'></app
 const getNeverSpamXml = _ => "<apps:property name='shouldNeverSpam' value='true'></apps:property>";
 const getMarkReadXml = _ => "<apps:property name='shouldMarkAsRead' value='true'></apps:property>";
 const getShouldArchiveXml = _ => "<apps:property name='shouldArchive' value='true'></apps:property>";
-const getArchiveIndirectXml = me => `<apps:property name="doesNotHaveTheWord" value='(${me})'></apps:property>`;
+const getArchiveIndirectXml = me => `<apps:property name="doesNotHaveTheWord" value='${me}'></apps:property>`;
 
 
 const getHasPart = hasValue => {
@@ -36,19 +32,22 @@ const getHasPart = hasValue => {
     return hasValue;
   } else if (hasValue.and) {
     debugger;
-    return hasValue.and.map(getHasPart).join(" AND ");
+    return `(${hasValue.and.map(getHasPart).join(" AND ")})`;
   } else if (hasValue.or) {
     debugger;
-    return hasValue.or.map(getHasPart).join(" OR ");
+    return `(${hasValue.or.map(getHasPart).join(" OR ")})`;
   }
 };
 const getHasXml = value => `<apps:property name='hasTheWord' value='${value}'></apps:property>`;
 const getHasRule = hasValue => getHasXml(getHasPart(hasValue));
 
 const convert = (json) => {
+  const date = new Date().toISOString();
+  const name = "William Falk-Wallace";
+  const email = "wfalkwallace@gmail.com";
   let xml = [xmlHeader(name, email, date)];
 
-  const me = json.me.join(" OR ");
+  const me = `(${json.me.join(" OR ")})`;
   const filters = json.filters;
   const filterXml = filters.reduce((xml, filter) => {
     let filterContent = [];
