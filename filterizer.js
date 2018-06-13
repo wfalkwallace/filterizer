@@ -15,11 +15,11 @@ const getHasPart = hasValue => {
   if (typeof hasValue === 'string') {
     return hasValue;
   } else if (hasValue.and) {
-    debugger;
     return `(${hasValue.and.map(getHasPart).join(' AND ')})`;
   } else if (hasValue.or) {
-    debugger;
     return `(${hasValue.or.map(getHasPart).join(' OR ')})`;
+  } else if (hasValue.not) {
+    return `(${hasValue.not.map(value => ' NOT ' + getHasPart(value))})`;
   }
 };
 const getHasRule = hasValue => getHasXml(getHasPart(hasValue));
